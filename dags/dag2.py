@@ -16,6 +16,7 @@ def _choose_best_model(ti):
         task_ids=["training_model_A", "training_model_B", "training_model_C"]
     )
     best_accuracy = max(accuracies)
+    print(tf.__version__)
     if best_accuracy > 8:
         return "accurate"
     return "inaccurate"
@@ -45,9 +46,9 @@ with DAG(
         task_id="choose_best_model", python_callable=_choose_best_model
     )
 
-    accurate = BashOperator(task_id="accurate", bash_command="python3 -c 'import tensorflow as tf; print(tf.__version__)'")
+    accurate = BashOperator(task_id="accurate", bash_command="echo 'accurate'")
 
-    inaccurate = BashOperator(task_id="inaccurate", bash_command="python3 -c 'import tensorflow as tf; print(tf.__version__)'")
+    inaccurate = BashOperator(task_id="inaccurate", bash_command="echo 'inaccurate'")
 
 
     (
