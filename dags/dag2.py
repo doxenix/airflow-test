@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 from random import randint
 from datetime import datetime
 
-
+import mlflow
 
 
 def _choose_best_model(ti):
