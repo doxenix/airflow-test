@@ -28,7 +28,7 @@ def _training_model():
 
 
 with DAG(
-    "my_dag_2", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
+    "my_dag_3", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
 ) as dag:
 
     training_model_A = PythonOperator(
