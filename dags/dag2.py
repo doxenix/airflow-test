@@ -8,6 +8,10 @@ from datetime import datetime
 import mlflow
 import tensorflow as tf
 
+import logging
+
+
+
 
 def _choose_best_model(ti):
     accuracies = ti.xcom_pull(
@@ -23,7 +27,8 @@ def _training_model():
     return randint(1, 10)
 
 def _tf():
-    return tf.version.VERSION
+    ver = tf.version.VERSION    
+    return logging.info(ver)
 
 
 with DAG(
@@ -42,6 +47,10 @@ with DAG(
         task_id="training_model_C", python_callable=_training_model
     )
 
+        tf = PythonOperator(
+        task_id="tf", python_callable=_tf
+    )
+
     choose_best_model = BranchPythonOperator(
         task_id="choose_best_model", python_callable=_choose_best_model
     )
@@ -50,13 +59,10 @@ with DAG(
 
     inaccurate = BashOperator(task_id="inaccurate", bash_command="echo 'inaccurate'")
 
-    tf = PythonOperator(
-        task_id="tf", python_callable=_tf
-    )
 
     (
         [training_model_A, training_model_B, training_model_C]
-        >> choose_best_model
-        >> [accurate, inaccurate]
         >> tf
+        >> choose_best_model
+        >> [accurate, inaccurate]        
     )
