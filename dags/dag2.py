@@ -6,6 +6,7 @@ from random import randint
 from datetime import datetime
 
 import mlflow
+import tensorflow as tf
 
 
 def _choose_best_model(ti):
@@ -20,6 +21,9 @@ def _choose_best_model(ti):
 
 def _training_model():
     return randint(1, 10)
+
+def _tf():
+    return tf.version.VERSION
 
 
 with DAG(
@@ -46,8 +50,13 @@ with DAG(
 
     inaccurate = BashOperator(task_id="inaccurate", bash_command="echo 'inaccurate'")
 
+    tf = PythonOperator(
+        task_id="tf", python_callable=_tf
+    )
+
     (
         [training_model_A, training_model_B, training_model_C]
         >> choose_best_model
         >> [accurate, inaccurate]
+        >> tf
     )
