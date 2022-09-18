@@ -23,7 +23,7 @@ def _training_model():
 
 
 with DAG(
-    "tensorflow", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
+    "my_dag_1", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
 ) as dag:
 
     training_model_A = PythonOperator(
@@ -42,9 +42,9 @@ with DAG(
         task_id="choose_best_model", python_callable=_choose_best_model
     )
 
-    accurate = BashOperator(task_id="accurate", bash_command="python3 -c 'import tensorflow as tf; print(tf.__version__)'")
+    accurate = BashOperator(task_id="accurate", bash_command="echo 'accurate'")
 
-    inaccurate = BashOperator(task_id="inaccurate", bash_command="python3 -c 'import tensorflow as tf; print(tf.__version__)'")
+    inaccurate = BashOperator(task_id="inaccurate", bash_command="echo 'inaccurate'")
 
     (
         [training_model_A, training_model_B, training_model_C]
