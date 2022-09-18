@@ -47,7 +47,7 @@ with DAG(
         task_id="training_model_C", python_callable=_training_model
     )
 
-        tf = PythonOperator(
+    tf = PythonOperator(
         task_id="tf", python_callable=_tf
     )
 
