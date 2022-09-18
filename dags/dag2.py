@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 from random import randint
 from datetime import datetime
 
-import tensorflow
+import mlflow
 
 
 def _choose_best_model(ti):
@@ -23,7 +23,7 @@ def _training_model():
 
 
 with DAG(
-    "my_dag_1", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
+    "my_dag_2", start_date=datetime(2021, 1, 1), schedule_interval="@daily", catchup=False
 ) as dag:
 
     training_model_A = PythonOperator(
